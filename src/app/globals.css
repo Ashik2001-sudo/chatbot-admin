@@ -1,26 +1,206 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@custom-variant dark (&:is([data-theme="dark"] *));
+@custom-variant light (&:is([data-theme="light"] *));
+
+:root,
+[data-theme="dark"] {
+  --background: #0f0f23;
+  --foreground: #ffffff;
+  --card: #1a1a2e;
+  --card-foreground: #ffffff;
+  --muted: #16213e;
+  --muted-foreground: rgba(255, 255, 255, 0.6);
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.08);
+  --primary: #6366f1;
+  --primary-foreground: #ffffff;
+  --secondary: #8b5cf6;
+  --accent: rgba(99, 102, 241, 0.15);
+  --accent-foreground: #c4b5fd;
+  --destructive: #ef4444;
+  --ring: #6366f1;
+  --sidebar: #12122a;
+  --sidebar-foreground: rgba(255, 255, 255, 0.85);
+  --glass: rgba(255, 255, 255, 0.05);
+  --success: #22c55e;
+  --whatsapp: #25d366;
+  --facebook: #1877f2;
+  --instagram: #e4405f;
+}
+
+[data-theme="light"] {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #475569;
+  --border: #e2e8f0;
+  --input: #ffffff;
+  --primary: #6366f1;
+  --primary-foreground: #ffffff;
+  --secondary: #8b5cf6;
+  --accent: rgba(99, 102, 241, 0.1);
+  --accent-foreground: #4338ca;
+  --destructive: #dc2626;
+  --ring: #6366f1;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #334155;
+  --glass: rgba(15, 23, 42, 0.03);
+  --success: #16a34a;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --font-sans: "Inter", "Noto Sans Bengali", ui-sans-serif, system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--border);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
 }
+
+.glass-card {
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+}
+
+/* Liquid Glass (iOS 26-style): translucent layers over ambient color,
+   inner top highlight for the "wet" edge, heavy blur + saturation. */
+.liquid-glass {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03));
+  backdrop-filter: blur(28px) saturate(170%);
+  -webkit-backdrop-filter: blur(28px) saturate(170%);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.04),
+    0 12px 40px rgba(0, 0, 0, 0.28);
+}
+
+[data-theme="light"] .liquid-glass {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.42));
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 12px 40px rgba(15, 23, 42, 0.10);
+}
+
+/* Smaller translucent tiles that sit on top of a liquid-glass card. */
+.glass-tile {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+.glass-tile:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+[data-theme="light"] .glass-tile {
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(15, 23, 42, 0.07);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+[data-theme="light"] .glass-tile:hover {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
+.gradient-accent {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+}
+
+.channel-whatsapp { color: var(--whatsapp); }
+.channel-facebook { color: var(--facebook); }
+.channel-instagram { color: var(--instagram); }
+
+@keyframes lightbox-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes lightbox-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes lightbox-pop-in {
+  0% { opacity: 0; transform: scale(0.88) translateY(24px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes lightbox-pop-out {
+  0% { opacity: 1; transform: scale(1) translateY(0); }
+  100% { opacity: 0; transform: scale(0.92) translateY(16px); }
+}
+
+@keyframes lightbox-bar-in {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes lightbox-bar-out {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-12px); }
+}
+
+/* expo-out easing gives the premium "spring settle" feel */
+.lightbox-overlay-in { animation: lightbox-fade-in 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+.lightbox-overlay-out { animation: lightbox-fade-out 0.22s ease-in forwards; }
+.lightbox-content-in { animation: lightbox-pop-in 0.42s cubic-bezier(0.16, 1, 0.3, 1); }
+.lightbox-content-out { animation: lightbox-pop-out 0.22s ease-in forwards; }
+.lightbox-bar-in { animation: lightbox-bar-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.08s backwards; }
+.lightbox-bar-out { animation: lightbox-bar-out 0.2s ease-in forwards; }
+
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #6366f1, #8b5cf6);
+  border-radius: 999px;
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes modal-pop {
+  from { opacity: 0; transform: scale(0.92) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Staggered page-section entrance; set --stagger per element. */
+.anim-fade-up {
+  animation: fade-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: calc(var(--stagger, 0) * 70ms);
+}
+.anim-overlay { animation: lightbox-fade-in 0.25s ease-out; }
+.anim-modal-pop { animation: modal-pop 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }

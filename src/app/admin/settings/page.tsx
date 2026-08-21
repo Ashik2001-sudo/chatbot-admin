@@ -21,7 +21,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { apiFetch, getTenantData } from "@/lib/config";
+import { apiFetch, config, getTenantData } from "@/lib/config";
 import { cn } from "@/lib/utils";
 
 interface ChannelStatus {
@@ -91,7 +91,7 @@ export default function SettingsPage() {
   );
   const tenant = mounted ? getTenantData<{ name: string; slug: string }>() : null;
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4001";
+  const apiUrl = config.API_URL;
   const webhooks = [
     { label: "Meta FB/IG", url: `${apiUrl}/webhooks/meta` },
     { label: "WhatsApp Cloud", url: `${apiUrl}/webhooks/whatsapp` },

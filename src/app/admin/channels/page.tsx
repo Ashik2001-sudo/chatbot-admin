@@ -21,7 +21,7 @@ interface Channel {
 export default function ChannelsPage() {
   const [channels, setChannels] = useState<Channel[]>([]);
   const [loading, setLoading] = useState(true);
-  const [qrModal, setQrModal] = useState<{ channelId: string; qr: string } | null>(null);
+  const [qrModal, setQrModal] = useState<{ channelId: string; qr: string | null } | null>(null);
   const [historyModal, setHistoryModal] = useState<
     { channelId: string; phase: "ask" | "syncing" } | null
   >(null);
@@ -98,14 +98,15 @@ export default function ChannelsPage() {
   const connectBaileys = async () => {
     try {
       qrRequested.current = true;
+      setQrModal({ channelId: "", qr: null });
       await apiFetch("/channels/whatsapp/baileys", {
         method: "POST",
         body: JSON.stringify({ name: baileysName }),
       });
-      toast.success("QR code generating...");
       load();
     } catch (err) {
       qrRequested.current = false;
+      setQrModal(null);
       toast.error(err instanceof Error ? err.message : "Failed");
     }
   };
@@ -342,12 +343,30 @@ export default function ChannelsPage() {
       {qrModal ? (
         <div className="anim-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
           <Card className="liquid-glass anim-modal-pop w-full max-w-sm shadow-2xl">
-            <CardHeader>
+            <CardHeader className="text-center">
               <CardTitle>Scan WhatsApp QR</CardTitle>
-              <CardDescription>Open WhatsApp → Linked devices → Scan</CardDescription>
+              <CardDescription>
+                {qrModal.qr
+                  ? "Open WhatsApp → Linked devices → Scan"
+                  : "Connecting to WhatsApp & generating QR code..."}
+              </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col items-center gap-4">
-              <Image src={qrModal.qr} alt="WhatsApp QR" width={256} height={256} unoptimized />
+              {qrModal.qr ? (
+                <Image
+                  src={qrModal.qr}
+                  alt="WhatsApp QR"
+                  width={256}
+                  height={256}
+                  unoptimized
+                  className="rounded-xl border shadow-inner"
+                />
+              ) : (
+                <div className="flex h-64 w-64 flex-col items-center justify-center gap-3 rounded-2xl bg-accent/30 p-4">
+                  <Loader2 className="h-10 w-10 animate-spin text-primary" />
+                  <p className="text-sm font-medium text-muted-foreground">Generating QR code...</p>
+                </div>
+              )}
               <Button
                 variant="outline"
                 onClick={() => {
